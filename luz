@@ -1,0 +1,72 @@
+uma # Importando as bibliotecas necessárias
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import seaborn as sns
+
+# Configurando o estilo do plot
+plt.style.use('dark_background')
+
+# Criando uma classe para representar uma célula que emite biofótons
+class BiophotonCell:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.emission_rate = np.random.uniform(0.5, 1.0)
+        self.phase = np.random.uniform(0, 2*np.pi)
+    
+    def emit(self, t):
+        # Simulando emissão de biofótons com padrão oscilatório
+        intensity = self.emission_rate * (1 + np.sin(t + self.phase)) / 2
+        return intensity
+
+# Criando um grid para simular múltiplas células
+n_cells = 5
+cells = []
+for i in range(n_cells):
+    for j in range(n_cells):
+        cells.append(BiophotonCell(i, j))
+
+# Criando uma função para calcular o campo de biofótons
+def calculate_field(x, y, t, cells):
+    field = np.zeros((x, y))
+    for i in range(x):
+        for j in range(y):
+            for cell in cells:
+                distance = np.sqrt((i - cell.x*10)**2 + (j - cell.y*10)**2)
+                if distance == 0:
+                    continue
+                field[i,j] += cell.emit(t) / (distance**2)
+    return field
+
+# Configurando a visualização
+grid_size = 100
+fig, ax = plt.subplots(figsize=(12, 10))
+
+# Função de atualização para a animação
+def update(frame):
+    ax.clear()
+    field = calculate_field(grid_size, grid_size, frame/10, cells)
+    
+    # Plotando o campo de biofótons com escala dinâmica
+    sns.heatmap(field, cmap='viridis', ax=ax, cbar_kws={'label': 'Intensidade da radiação'}, vmin=0, vmax=np.max(field)*1.1)
+    
+    # Marcando as posições das células
+    for cell in cells:
+        ax.plot(cell.y*10, cell.x*10, 'ro', markersize=12, alpha=0.9, label='Células emissoras')
+    
+    # Adicionando título e legendas
+    ax.set_title('Simulação Avançada da Emissão de Biofótons\
+(Intensidade da radiação mostrada em cores)\
+Frame: {}'.format(frame), fontsize=16)
+    ax.set_xlabel('Posição X', fontsize=14)
+    ax.set_ylabel('Posição Y', fontsize=14)
+    ax.legend(loc='upper right', fontsize=12)
+
+# Criando a animação
+anim = FuncAnimation(fig, update, frames=100, interval=100, repeat=True)
+
+# Salvando a animação como MP4
+anim.save('perfect_biophoton_simulation.mp4', writer='ffmpeg', dpi=200)
+print("Simulação perfeita salva como 'perfect_biophoton_simulation.mp4'")
+plt.close()
