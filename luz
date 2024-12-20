@@ -1,4 +1,4 @@
-uma # Importando as bibliotecas necessárias
+# Importando as bibliotecas necessárias
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
