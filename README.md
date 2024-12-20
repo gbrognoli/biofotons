@@ -1,4 +1,4 @@
-Criei uma simulação visual para ajudar a entender o conceito de biofótons e sua emissão pelas células. A simulação foi salva como 'biophoton_simulation.mp4' e você pode baixá-la em https://julius.ai/files/biophoton_simulation.mp4
+Criei uma simulação visual para ajudar a entender o conceito de biofótons e sua emissão pelas células. A simulação foi salva como 'biophoton_simulation.mp4' e você pode baixá-la em 
 
 Vou explicar o que o código faz:
 
